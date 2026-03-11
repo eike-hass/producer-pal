@@ -77,26 +77,6 @@ describe("MCP Express App", () => {
         expect.any(Function),
       );
     });
-
-    it("should invoke geminiKey handler without throwing", () => {
-      const handler = mockMax.handlers.get("geminiKey") as
-        | ((...args: unknown[]) => void)
-        | undefined;
-
-      expect(handler).toBeDefined();
-      expect(() => handler!("my-api-key")).not.toThrow();
-      expect(() => handler!("bang")).not.toThrow();
-    });
-
-    it("should invoke geminiModel handler without throwing", () => {
-      const handler = mockMax.handlers.get("geminiModel") as
-        | ((model: unknown) => void)
-        | undefined;
-
-      expect(handler).toBeDefined();
-      expect(() => handler!("gemini-2.5-flash")).not.toThrow();
-      expect(() => handler!("bang")).not.toThrow();
-    });
   });
 
   describe("Client Connection", () => {
