@@ -26,6 +26,7 @@
   ],
   "scripts": {
     "build": "npm run parser:build && npm run ui:build && rollup -c config/rollup.config.mjs && npm run dxt:build",
+    "build:all": "ENABLE_RAW_LIVE_API=true ENABLE_CODE_EXEC=true ENABLE_WARP_MARKERS=true ENABLE_LISTEN=true npm run build",
     "build:dev": "ENABLE_DEV_CORS=true npm run build",
     "build:debug": "ENABLE_RAW_LIVE_API=true ENABLE_CODE_EXEC=true ENABLE_DEV_CORS=true npm run build",
     "build:watch": "npm run build && rollup -c config/rollup.config.mjs -w",
@@ -122,6 +123,7 @@
     "@tailwindcss/vite": "4.2.2",
     "@testing-library/preact": "3.2.4",
     "@types/express": "5.0.6",
+    "@types/max-api": "2.0.3",
     "@types/node": "25.5.0",
     "@typescript-eslint/eslint-plugin": "8.57.2",
     "@typescript-eslint/parser": "8.57.2",

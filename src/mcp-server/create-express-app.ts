@@ -15,6 +15,7 @@ import Max from "max-api";
 import chatUiHtml from "virtual:chat-ui-html";
 import { errorMessage } from "#src/shared/error-utils.ts";
 import { TOOL_NAMES, createMcpServer } from "./create-mcp-server.ts";
+import { setGeminiKey, setGeminiModel } from "./listen-config.ts";
 import { callLiveApi } from "./max-api-adapter.ts";
 import * as console from "./node-for-max-logger.ts";
 import { registerRestApiRoutes } from "./rest-api-routes.ts";
@@ -80,6 +81,17 @@ Max.addHandler("sampleFolder", (path: unknown) => {
 
   // console.log(`[node] Setting sampleFolder ${value}`);
   config.sampleFolder = value;
+});
+
+Max.addHandler("geminiKey", (...args: unknown[]) => {
+  const key = args.join(" ");
+
+  console.warn(`[geminiKey handler] received ${args.length} args: "${key}"`);
+  setGeminiKey(key === "bang" ? "" : key);
+});
+
+Max.addHandler("geminiModel", (model: unknown) => {
+  setGeminiModel(model === "bang" ? "" : String(model ?? ""));
 });
 
 interface JsonRpcError {

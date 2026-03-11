@@ -10,17 +10,151 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 342.0, 123.0, 753.0, 681.0 ],
+		"rect" : [ 1449.0, 140.0, 1427.0, 1075.0 ],
 		"openinpresentation" : 1,
 		"gridsize" : [ 15.0, 15.0 ],
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-92",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 580.0, 795.559999999999945, 100.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-87",
+					"maxclass" : "newobj",
+					"numinlets" : 0,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 906.417085826396942, 437.0, 60.0, 22.0 ],
+					"text" : "r ---config"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-96",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 903.208529770374298, 526.0, 72.0, 22.0 ],
+					"text" : "prepend set"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-95",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 906.417085826396942, 486.631001830101013, 95.0, 22.0 ],
+					"text" : "route geminiKey"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-83",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "" ],
+					"patching_rect" : [ 831.0, 658.235321581363678, 59.0, 22.0 ],
+					"text" : "route text"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-90",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 883.352943360805511, 755.294149160385132, 89.0, 22.0 ],
+					"text" : "s ---node-script"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-91",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 831.0, 755.294149160385132, 42.0, 22.0 ],
+					"text" : "s ---v8"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-89",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 831.0, 715.882382810115814, 112.0, 22.0 ],
+					"text" : "prepend geminiKey"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-88",
+					"maxclass" : "textedit",
+					"numinlets" : 1,
+					"numoutlets" : 4,
+					"outlettype" : [ "", "int", "", "" ],
+					"parameter_enable" : 1,
+					"patching_rect" : [ 831.0, 567.713023602962494, 100.0, 50.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ 167.0, 55.0, 99.999996721744537, 26.185186982154846 ],
+					"saved_attribute_attributes" : 					{
+						"valueof" : 						{
+							"parameter_invisible" : 1,
+							"parameter_longname" : "geminiKey",
+							"parameter_modmode" : 0,
+							"parameter_shortname" : "geminiKey",
+							"parameter_type" : 3
+						}
+
+					}
+,
+					"varname" : "geminiKey"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-84",
+					"linecount" : 2,
+					"maxclass" : "live.comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 831.0, 519.0, 43.0, 29.0 ],
+					"presentation" : 1,
+					"presentation_linecount" : 2,
+					"presentation_rect" : [ 120.0, 59.0, 45.0, 29.0 ],
+					"text" : "GEMINI API KEY",
+					"textjustification" : 2
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"bubble" : 1,
 					"bubblepoint" : 0.0,
 					"bubbleside" : 0,
 					"bubbletextmargin" : 2,
 					"fontsize" : 9.5,
-					"hidden" : 1,
 					"id" : "obj-38",
 					"linecount" : 2,
 					"maxclass" : "comment",
@@ -28,7 +162,7 @@
 					"numoutlets" : 0,
 					"patching_rect" : [ 103.0, 418.0, 66.0, 41.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 13.0, 35.0, 92.0, 30.0 ],
+					"presentation_rect" : [ 15.0, 40.0, 92.0, 30.0 ],
 					"text" : "See Max Console",
 					"textjustification" : 1,
 					"varname" : "see-console"
@@ -78,7 +212,7 @@
 					"numinlets" : 4,
 					"numoutlets" : 4,
 					"outlettype" : [ "", "", "", "" ],
-					"patching_rect" : [ 511.5, 32.0, 166.0, 35.0 ],
+					"patching_rect" : [ 511.5, 32.0, 166.0, 36.0 ],
 					"text" : "route smallModelMode compactOutput samplePath"
 				}
 
@@ -126,7 +260,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 400.0, 513.0, 100.0, 87.0 ],
+					"patching_rect" : [ 400.0, 513.0, 100.0, 89.0 ],
 					"text" : "Note, the port cannot be synced on start because it will stop the MCP server"
 				}
 
@@ -318,7 +452,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 151.5, -10.0, 166.0, 47.0 ],
+					"patching_rect" : [ 151.5, -10.0, 166.0, 48.0 ],
 					"text" : "sync values from the UI to Node for Max and v8 when they've finished starting"
 				}
 
@@ -417,6 +551,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 123.0, 0.0, 126.700252115726471, 74.055415749549866 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "Sample Folder"
 				}
 
@@ -589,7 +730,7 @@
 			}
 , 			{
 				"box" : 				{
-					"activebgcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
+					"activebgcolor" : [ 0.9, 0.0, 0.0, 1.0 ],
 					"activebgoncolor" : [ 0.4, 0.0, 0.0, 1.0 ],
 					"id" : "obj-55",
 					"ignoreclick" : 1,
@@ -640,6 +781,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 6.0, 21.0, 61.0, 32.0 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "Producer Pal Status"
 				}
 
@@ -676,7 +824,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 42.0, 480.0, 134.0, 35.0 ],
+					"patching_rect" : [ 42.0, 480.0, 134.0, 36.0 ],
 					"text" : "script sendbox see-console hidden $1"
 				}
 
@@ -775,7 +923,7 @@
 					"patching_rect" : [ 191.0, 439.0, 65.0, 18.0 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 24.0, 27.0, 50.0, 18.0 ],
-					"text" : "Stopped",
+					"text" : "Error",
 					"textjustification" : 0
 				}
 
@@ -883,7 +1031,7 @@
 							"parameter_initial" : [ 0 ],
 							"parameter_initial_enable" : 1,
 							"parameter_invisible" : 1,
-							"parameter_longname" : "json-output",
+							"parameter_longname" : "live.toggle[1]",
 							"parameter_mmax" : 1,
 							"parameter_modmode" : 0,
 							"parameter_shortname" : "json-output",
@@ -988,7 +1136,7 @@
 							"parameter_initial" : [ 0.0 ],
 							"parameter_initial_enable" : 1,
 							"parameter_invisible" : 1,
-							"parameter_longname" : "verbose-logs",
+							"parameter_longname" : "live.toggle[2]",
 							"parameter_mmax" : 1,
 							"parameter_modmode" : 0,
 							"parameter_shortname" : "verbose-logs",
@@ -998,26 +1146,6 @@
 					}
 ,
 					"varname" : "verbose-logs"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"angle" : 270.0,
-					"annotation" : "Network port for Producer Pal's connection to AI such as Claude Desktop. Default is 3350. Change if you have port conflicts with other software. If changed, the AI's MCP connection settings must be updated to match (e.g. in Claude Desktop extension settings).",
-					"bgcolor" : [ 0.163688058058427, 0.163688010157025, 0.163688022674427, 0.0 ],
-					"hint" : "",
-					"id" : "obj-31",
-					"ignoreclick" : 0,
-					"maxclass" : "panel",
-					"mode" : 0,
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 266.0, 556.0, 63.0, 83.5 ],
-					"presentation" : 1,
-					"presentation_rect" : [ 4.0, 54.0, 114.0, 29.0 ],
-					"proportion" : 0.39,
-					"varname" : "Server Port"
 				}
 
 			}
@@ -1037,6 +1165,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 4.0, 85.0, 114.0, 26.0 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "Timeout"
 				}
 
@@ -1057,6 +1192,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 131.0, 119.0, 96.0, 27.5 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "Verbose Logs"
 				}
 
@@ -1077,6 +1219,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 131.0, 94.25, 96.0, 27.25 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "JSON Output"
 				}
 
@@ -1097,6 +1246,13 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 4.0, 113.0, 114.0, 33.0 ],
 					"proportion" : 0.39,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+,
 					"varname" : "Small Model Mode"
 				}
 
@@ -1316,7 +1472,7 @@
 					"maxclass" : "live.comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 151.0, 83.0, 45.0, 29.0 ],
+					"patching_rect" : [ 151.0, 83.0, 46.0, 29.0 ],
 					"presentation" : 1,
 					"presentation_rect" : [ 153.0, 124.0, 71.39743, 18.0 ],
 					"text" : "Verbose Logs",
@@ -1468,7 +1624,14 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 0.0, 0.0, 250.0, 150.0 ],
 					"proportion" : 0.39,
-					"rounded" : 0
+					"rounded" : 0,
+					"saved_attribute_attributes" : 					{
+						"bgfillcolor" : 						{
+							"expression" : ""
+						}
+
+					}
+
 				}
 
 			}
@@ -2031,6 +2194,57 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-89", 0 ],
+					"source" : [ "obj-83", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-95", 0 ],
+					"source" : [ "obj-87", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-83", 0 ],
+					"source" : [ "obj-88", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-90", 0 ],
+					"order" : 0,
+					"source" : [ "obj-89", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-91", 0 ],
+					"order" : 1,
+					"source" : [ "obj-89", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-96", 0 ],
+					"source" : [ "obj-95", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-88", 0 ],
+					"source" : [ "obj-96", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-72", 0 ],
 					"midpoints" : [ 633.5, 320.5, 497.5, 320.5 ],
 					"source" : [ "obj-97", 1 ]
@@ -2046,23 +2260,14 @@
 
 			}
  ],
-		"parameters" : 		{
-			"obj-17" : [ "json-output", "json-output", 0 ],
-			"obj-21" : [ "small-model-mode", "small-model-mode", 0 ],
-			"obj-35" : [ "live.text[2]", "live.text[2]", 0 ],
-			"obj-55" : [ "live.button", "live.button", 0 ],
-			"obj-62" : [ "live.text[3]", "live.text[2]", 0 ],
-			"obj-64" : [ "port", "port", 0 ],
-			"obj-68" : [ "timeout", "timeout", 0 ],
-			"obj-69" : [ "live.text", "live.text", 0 ],
-			"obj-70" : [ "live.text[1]", "live.text", 0 ],
-			"obj-72" : [ "sampleFolder", "sampleFolder", 0 ],
-			"obj-8" : [ "verbose-logs", "verbose-logs", 0 ],
-			"inherited_shortname" : 1
+		"saved_attribute_attributes" : 		{
+			"default_plcolor" : 			{
+				"expression" : ""
+			}
+
 		}
 ,
-		"dependency_cache" : [  ],
-		"autosave" : 0
+		"oscreceiveudpport" : 0
 	}
 
 }

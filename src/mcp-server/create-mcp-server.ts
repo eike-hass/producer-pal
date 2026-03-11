@@ -1,8 +1,11 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
 import { VERSION } from "#src/shared/version.ts";
 import { toolDefCreateClip } from "#src/tools/clip/create/create-clip.def.ts";
 import { toolDefReadClip } from "#src/tools/clip/read/read-clip.def.ts";
@@ -94,5 +97,69 @@ export function createMcpServer(
     toolDefRawLiveApi(server, callLiveApi, { smallModelMode });
   }
 
+  // Listen tool: records audio and describes it via Gemini
+  if (process.env.ENABLE_LISTEN === "true" && !smallModelMode) {
+    registerListenTool(server, callLiveApi);
+  }
+
   return server;
+}
+
+/**
+ * Register the ppal-listen tool with a custom Node-side handler.
+ * Unlike standard tools, this tool orchestrates multiple V8 calls with async waits.
+ * @param server - MCP server instance
+ * @param callLiveApi - Function to call V8 tools
+ */
+function registerListenTool(
+  server: McpServer,
+  callLiveApi: CallLiveApiFunction,
+): void {
+  server.registerTool(
+    "ppal-listen",
+    {
+      title: "Listen",
+      description:
+        "Record audio from Ableton and describe it using AI. " +
+        "Records master output via resampling, then analyzes with Gemini.",
+      annotations: { readOnlyHint: false, destructiveHint: false },
+      inputSchema: z.object({
+        duration: z
+          .string()
+          .optional()
+          .describe(
+            'recording duration in bar:beat format (default: "4:0" = 4 bars)',
+          ),
+        prompt: z
+          .string()
+          .optional()
+          .describe("what to listen for (default: general audio analysis)"),
+        trackIndex: z.coerce
+          .number()
+          .int()
+          .min(0)
+          .optional()
+          .describe(
+            "0-based index of audio track for resampling (auto-detected/created if omitted)",
+          ),
+        sceneIndex: z.coerce
+          .number()
+          .int()
+          .min(0)
+          .optional()
+          .describe(
+            "0-based scene index for recording slot (first empty slot if omitted)",
+          ),
+        model: z
+          .string()
+          .optional()
+          .describe("Gemini model for analysis (default: gemini-2.5-flash)"),
+      }),
+    },
+    async (args: Record<string, unknown>): Promise<CallToolResult> => {
+      const { handleListen } = await import("./listen-handler.ts");
+
+      return await handleListen(callLiveApi, args);
+    },
+  );
 }
