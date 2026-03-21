@@ -26,8 +26,8 @@
   ],
   "scripts": {
     "build": "npm run parser:build && npm run ui:build && rollup -c config/rollup.config.mjs && npm run dxt:build",
-    "build:dev": "ENABLE_DEV_CORS=true npm run build",
-    "build:debug": "ENABLE_RAW_LIVE_API=true ENABLE_CODE_EXEC=true ENABLE_DEV_CORS=true npm run build",
+    "build:dev": "ENABLE_DEV_CORS=true ENABLE_RUN_PLAN=true npm run build",
+    "build:debug": "ENABLE_RAW_LIVE_API=true ENABLE_CODE_EXEC=true ENABLE_DEV_CORS=true ENABLE_RUN_PLAN=true npm run build",
     "build:watch": "npm run build && rollup -c config/rollup.config.mjs -w",
     "dev": "npm run parser:build && ENABLE_DEV_CORS=true rollup -c config/rollup.config.mjs -w",
     "dev:debug": "ENABLE_RAW_LIVE_API=true ENABLE_CODE_EXEC=true npm run dev",
