@@ -7,6 +7,7 @@ import { type McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { type CallLiveApiFunction } from "./create-mcp-server.ts";
+import { handleRunPlan } from "./run-plan-handler.ts";
 
 /**
  * Register the ppal-run-plan tool with a custom Node-side handler.
@@ -34,8 +35,6 @@ export function registerRunPlanTool(
       }),
     },
     async (args: Record<string, unknown>): Promise<CallToolResult> => {
-      const { handleRunPlan } = await import("./run-plan-handler.ts");
-
       return await handleRunPlan(callLiveApi, args);
     },
   );
