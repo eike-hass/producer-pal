@@ -1,6 +1,46 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
+
+const runPlanSkills = `
+## Plan Runner
+
+Batch multiple tool calls with ppal-run-plan. Pass a JSON plan as a string.
+Groups run sequentially; steps within a group run in parallel.
+Any step failure (or unresolvable reference) aborts remaining groups.
+
+Steps with \`id\` can be referenced by later steps: \${id.field}
+References work mid-string: "t\${track.trackIndex}/d0" → "t2/d0"
+
+Return fields (single item):
+- ppal-create-track → {id, trackIndex}
+- ppal-create-clip → {id, noteCount?}
+- ppal-create-device → {id, deviceIndex}
+- ppal-create-scene → {id, sceneIndex}
+- ppal-update-track/clip/device → {id}
+- ppal-duplicate → {id, ...} (varies)
+- ppal-delete → {id, deleted}
+
+\`\`\`json
+{"intent":"4-bar drums at bar 33","groups":[
+  {"steps":[
+    {"id":"t","tool":"ppal-create-track","params":{"name":"Drums","type":"midi"}}
+  ]},
+  {"steps":[
+    {"tool":"ppal-create-device","params":{"deviceName":"Drum Rack","path":"t\${t.trackIndex}"}},
+    {"id":"c","tool":"ppal-create-clip","params":{"trackIndex":"\${t.trackIndex}",
+      "arrangementStart":"33|1","length":"4:0","notes":"C1 1|1,3 D1 1|2,4 t/4 Gb1 1|1x16 @2-4=1"}}
+  ]},
+  {"steps":[
+    {"tool":"ppal-update-clip","params":{"ids":"\${c.id}",
+      "transforms":"Gb1: velocity = 60 + 30 * sin(1t)"}}
+  ]}
+]}
+\`\`\`
+
+Use run-plan for 3+ related tool calls. Use direct tool calls for single operations or when you need to read state between steps.
+`;
 
 const codeTransformsSkills = `
 
@@ -163,6 +203,7 @@ C1-C2: duration /= 2           // halve duration of bass notes
 \`+=\` compounds on repeated calls; \`=\` is idempotent. \`*=\`/\`/=\` scale the current value (\`timing *=\` scales absolute note position). Use update-clip with only transforms to modify existing notes.
 MIDI params ignored for audio clips, vice versa.
 ${process.env.ENABLE_CODE_EXEC === "true" ? codeTransformsSkills : ""}
+${process.env.ENABLE_RUN_PLAN === "true" ? runPlanSkills : ""}
 ## Working with Ableton Live
 
 **Views and Playback:**

@@ -1,5 +1,6 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
@@ -26,6 +27,7 @@ import { toolDefReadTrack } from "#src/tools/track/read/read-track.def.ts";
 import { toolDefUpdateTrack } from "#src/tools/track/update/update-track.def.ts";
 import { toolDefConnect } from "#src/tools/workflow/connect.def.ts";
 import { toolDefContext } from "#src/tools/workflow/context.def.ts";
+import { registerRunPlanTool } from "./register-run-plan-tool.ts";
 
 export type CallLiveApiFunction = (
   tool: string,
@@ -92,6 +94,11 @@ export function createMcpServer(
   // Dev-only tool: bypasses the tools whitelist, gated by env var
   if (process.env.ENABLE_RAW_LIVE_API === "true" && !smallModelMode) {
     toolDefRawLiveApi(server, callLiveApi, { smallModelMode });
+  }
+
+  // Run-plan tool: executes multi-step production plans
+  if (process.env.ENABLE_RUN_PLAN === "true" && !smallModelMode) {
+    registerRunPlanTool(server, callLiveApi);
   }
 
   return server;
