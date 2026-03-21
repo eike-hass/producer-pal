@@ -12,7 +12,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { type ToolSet, jsonSchema } from "ai";
 
-const DEFAULT_MCP_URL = "http://localhost:3350/mcp";
+const DEFAULT_MCP_URL = process.env.MCP_URL ?? "http://localhost:3350/mcp";
 const MCP_CLIENT_NAME = "producer-pal-chat";
 const MCP_CLIENT_VERSION = "1.0.0";
 
