@@ -4,8 +4,14 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import Max from "max-api";
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it, vi } from "vitest";
+import { createMcpServer } from "../create-mcp-server.ts";
 import { setupExpressAppServer } from "./express-app-test-helpers.ts";
+
+// Mock capture-handler to avoid real device calls in registration tests
+vi.mock(import("../capture-handler.ts"), () => ({
+  handleCapture: vi.fn(),
+}));
 
 // Type for mock Max module with test-specific properties
 type MockMax = typeof Max & {
@@ -130,5 +136,106 @@ describe("Handler Registration", () => {
 
     handler(undefined);
     expect(await getConfigField("sampleFolder")).toBe("");
+  });
+
+  it("does not register geminiKey handler (removed with ppal-listen)", () => {
+    expect(mockMax.handlers.has("geminiKey")).toBe(false);
+  });
+
+  it("does not register geminiModel handler (removed with ppal-listen)", () => {
+    expect(mockMax.handlers.has("geminiModel")).toBe(false);
+  });
+});
+
+describe("createMcpServer with ENABLE_CAPTURE", () => {
+  beforeAll(async () => {
+    // Ensure create-express-app is loaded so handlers are registered
+    await import("../create-express-app.ts");
+  });
+
+  it("registers ppal-capture tool when ENABLE_CAPTURE is true", async () => {
+    process.env.ENABLE_CAPTURE = "true";
+    const server = createMcpServer(() => Promise.resolve([]), {});
+    const tools = (
+      server as unknown as {
+        _registeredTools: Record<
+          string,
+          { handler: (args: unknown) => unknown }
+        >;
+      }
+    )._registeredTools;
+
+    expect(tools["ppal-capture"]).toBeDefined();
+    await tools["ppal-capture"]!.handler({});
+    delete process.env.ENABLE_CAPTURE;
+  });
+
+  it("passes sampleFolder to handleCapture when ENABLE_CAPTURE is true", async () => {
+    process.env.ENABLE_CAPTURE = "true";
+    const { handleCapture } = await import("../capture-handler.ts");
+    const mockHandleCapture = vi.mocked(handleCapture);
+
+    const server = createMcpServer(() => Promise.resolve([]), {
+      sampleFolder: "/test/samples",
+    });
+    const tools = (
+      server as unknown as {
+        _registeredTools: Record<
+          string,
+          { handler: (args: unknown) => unknown }
+        >;
+      }
+    )._registeredTools;
+
+    await tools["ppal-capture"]!.handler({});
+
+    expect(mockHandleCapture).toHaveBeenCalledWith(
+      expect.any(Function),
+      "/test/samples",
+      expect.any(Object),
+    );
+    delete process.env.ENABLE_CAPTURE;
+  });
+
+  it("defaults sampleFolder to empty string when not configured", async () => {
+    process.env.ENABLE_CAPTURE = "true";
+    const { handleCapture } = await import("../capture-handler.ts");
+    const mockHandleCapture = vi.mocked(handleCapture);
+
+    const server = createMcpServer(() => Promise.resolve([]), {});
+    const tools = (
+      server as unknown as {
+        _registeredTools: Record<
+          string,
+          { handler: (args: unknown) => unknown }
+        >;
+      }
+    )._registeredTools;
+
+    await tools["ppal-capture"]!.handler({});
+
+    const lastCall = mockHandleCapture.mock.calls.at(-1)!;
+
+    expect(lastCall[1]).toBe("");
+    delete process.env.ENABLE_CAPTURE;
+  });
+
+  it("does not register ppal-capture when ENABLE_CAPTURE is not set", () => {
+    delete process.env.ENABLE_CAPTURE;
+    const server = createMcpServer(() => Promise.resolve([]), {});
+    const tools = (
+      server as unknown as { _registeredTools: Record<string, unknown> }
+    )._registeredTools;
+
+    expect(tools["ppal-capture"]).toBeUndefined();
+  });
+
+  it("does not register ppal-listen (removed)", () => {
+    const server = createMcpServer(() => Promise.resolve([]), {});
+    const tools = (
+      server as unknown as { _registeredTools: Record<string, unknown> }
+    )._registeredTools;
+
+    expect(tools["ppal-listen"]).toBeUndefined();
   });
 });

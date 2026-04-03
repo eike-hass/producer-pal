@@ -66,6 +66,7 @@ export const TOOL_NAMES: readonly string[] = Object.freeze(
 interface CreateMcpServerOptions {
   smallModelMode?: boolean;
   tools?: string[];
+  sampleFolder?: string;
 }
 
 /**
@@ -79,7 +80,7 @@ export function createMcpServer(
   callLiveApi: CallLiveApiFunction,
   options: CreateMcpServerOptions = {},
 ): McpServer {
-  const { smallModelMode = false, tools } = options;
+  const { smallModelMode = false, tools, sampleFolder = "" } = options;
   const includedSet = tools ? new Set(tools) : null;
 
   const server = new McpServer({
@@ -97,31 +98,33 @@ export function createMcpServer(
     toolDefRawLiveApi(server, callLiveApi, { smallModelMode });
   }
 
-  // Listen tool: records audio and describes it via Gemini
-  if (process.env.ENABLE_LISTEN === "true" && !smallModelMode) {
-    registerListenTool(server, callLiveApi);
+  // Capture tool: records audio to a WAV file
+  if (process.env.ENABLE_CAPTURE === "true" && !smallModelMode) {
+    registerCaptureTool(server, callLiveApi, sampleFolder);
   }
 
   return server;
 }
 
 /**
- * Register the ppal-listen tool with a custom Node-side handler.
- * Unlike standard tools, this tool orchestrates multiple V8 calls with async waits.
+ * Register the ppal-capture tool with a custom Node-side handler.
+ * Unlike standard tools, this tool communicates with the ppal-capture.amxd device.
  * @param server - MCP server instance
  * @param callLiveApi - Function to call V8 tools
+ * @param sampleFolder - Configured sample folder path (or empty string if not set)
  */
-function registerListenTool(
+function registerCaptureTool(
   server: McpServer,
   callLiveApi: CallLiveApiFunction,
+  sampleFolder: string,
 ): void {
   server.registerTool(
-    "ppal-listen",
+    "ppal-capture",
     {
-      title: "Listen",
+      title: "Capture",
       description:
-        "Record audio from Ableton and describe it using AI. " +
-        "Records master output via resampling, then analyzes with Gemini.",
+        "Record audio from the Live session to a WAV file. " +
+        "Returns the file path for use with ppal-create-clip.",
       annotations: { readOnlyHint: false, destructiveHint: false },
       inputSchema: z.object({
         duration: z
@@ -130,36 +133,19 @@ function registerListenTool(
           .describe(
             'recording duration in bar:beat format (default: "4:0" = 4 bars)',
           ),
-        prompt: z
-          .string()
-          .optional()
-          .describe("what to listen for (default: general audio analysis)"),
-        trackIndex: z.coerce
-          .number()
-          .int()
-          .min(0)
+        source: z
+          .union([z.coerce.number(), z.literal("master")])
           .optional()
           .describe(
-            "0-based index of audio track for resampling (auto-detected/created if omitted)",
+            "what to capture: track index for a specific track (post-fader), " +
+              "or 'master' for full mix. Default: master",
           ),
-        sceneIndex: z.coerce
-          .number()
-          .int()
-          .min(0)
-          .optional()
-          .describe(
-            "0-based scene index for recording slot (first empty slot if omitted)",
-          ),
-        model: z
-          .string()
-          .optional()
-          .describe("Gemini model for analysis (default: gemini-2.5-flash)"),
       }),
     },
     async (args: Record<string, unknown>): Promise<CallToolResult> => {
-      const { handleListen } = await import("./listen-handler.ts");
+      const { handleCapture } = await import("./capture-handler.ts");
 
-      return await handleListen(callLiveApi, args);
+      return await handleCapture(callLiveApi, sampleFolder, args);
     },
   );
 }

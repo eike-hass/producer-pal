@@ -18,6 +18,7 @@ import {
 import * as console from "#src/shared/v8-max-console.ts";
 import { isNewerVersion } from "#src/shared/version-check.ts";
 import { MIN_LIVE_VERSION, VERSION } from "#src/shared/version.ts";
+import { captureStart } from "#src/tools/capture/capture.ts";
 import { createClip } from "#src/tools/clip/create/create-clip.ts";
 import { readClip } from "#src/tools/clip/read/read-clip.ts";
 import { updateClip } from "#src/tools/clip/update/update-clip.ts";
@@ -27,7 +28,6 @@ import { select } from "#src/tools/control/select.ts";
 import { createDevice } from "#src/tools/device/create/create-device.ts";
 import { readDevice } from "#src/tools/device/read/read-device.ts";
 import { updateDevice } from "#src/tools/device/update/update-device.ts";
-import { listenStart, listenStop } from "#src/tools/listen/listen.ts";
 import { readLiveSet } from "#src/tools/live-set/read-live-set.ts";
 import { updateLiveSet } from "#src/tools/live-set/update-live-set.ts";
 import { deleteObject } from "#src/tools/operations/delete/delete.ts";
@@ -105,8 +105,7 @@ const tools: Record<string, (args: unknown) => unknown> = {
   },
   "ppal-context": (args) => contextTool(args as any, context),
   "ppal-raw-live-api": (args) => rawLiveApi(args as any, context),
-  "ppal-listen-start": (args) => listenStart(args as any),
-  "ppal-listen-stop": (args) => listenStop(args as any),
+  "ppal-capture-start": (args) => captureStart(args as any),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any -- end of tools dispatch section */
 
