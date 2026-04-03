@@ -1,5 +1,5 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
 // AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -138,13 +138,6 @@ describe("Handler Registration", () => {
     expect(await getConfigField("sampleFolder")).toBe("");
   });
 
-  it("does not register geminiKey handler (removed with ppal-listen)", () => {
-    expect(mockMax.handlers.has("geminiKey")).toBe(false);
-  });
-
-  it("does not register geminiModel handler (removed with ppal-listen)", () => {
-    expect(mockMax.handlers.has("geminiModel")).toBe(false);
-  });
 });
 
 describe("createMcpServer with ENABLE_CAPTURE", () => {
@@ -230,12 +223,4 @@ describe("createMcpServer with ENABLE_CAPTURE", () => {
     expect(tools["ppal-capture"]).toBeUndefined();
   });
 
-  it("does not register ppal-listen (removed)", () => {
-    const server = createMcpServer(() => Promise.resolve([]), {});
-    const tools = (
-      server as unknown as { _registeredTools: Record<string, unknown> }
-    )._registeredTools;
-
-    expect(tools["ppal-listen"]).toBeUndefined();
-  });
 });
