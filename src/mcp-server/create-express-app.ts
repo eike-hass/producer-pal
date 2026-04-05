@@ -149,6 +149,7 @@ export function createExpressApp(): Express {
       const server = createMcpServer(callLiveApi, {
         smallModelMode: config.smallModelMode,
         tools: config.tools,
+        sampleFolder: config.sampleFolder,
       });
       const transport = new StreamableHTTPServerTransport({
         sessionIdGenerator: undefined, // Stateless mode

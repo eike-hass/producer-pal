@@ -1,5 +1,6 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import alias from "@rollup/plugin-alias";
@@ -43,6 +44,7 @@ const envVarReplacements = {
     process.env.ENABLE_WARP_MARKERS,
   ),
   "process.env.ENABLE_DEV_CORS": JSON.stringify(process.env.ENABLE_DEV_CORS),
+  "process.env.ENABLE_CAPTURE": JSON.stringify(process.env.ENABLE_CAPTURE),
 };
 
 // When code execution is disabled, substitute the real code-exec modules with
@@ -134,6 +136,7 @@ export default [
     output: {
       file: join(rootDir, "max-for-live-device/mcp-server.mjs"),
       format: "es",
+      inlineDynamicImports: true,
     },
     external: ["max-api"],
     plugins: [
@@ -175,10 +178,12 @@ export default [
       {
         file: join(rootDir, "claude-desktop-extension/producer-pal-portal.js"),
         format: "es",
+        inlineDynamicImports: true,
       },
       {
         file: join(rootDir, "npm/producer-pal-portal.js"),
         format: "es",
+        inlineDynamicImports: true,
       },
     ],
     plugins: [

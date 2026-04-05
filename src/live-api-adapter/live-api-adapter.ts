@@ -1,5 +1,6 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // Entry point for the tool implementations with direct Live API access
@@ -17,6 +18,7 @@ import {
 import * as console from "#src/shared/v8-max-console.ts";
 import { isNewerVersion } from "#src/shared/version-check.ts";
 import { MIN_LIVE_VERSION, VERSION } from "#src/shared/version.ts";
+import { captureStart } from "#src/tools/capture/capture.ts";
 import { createClip } from "#src/tools/clip/create/create-clip.ts";
 import { readClip } from "#src/tools/clip/read/read-clip.ts";
 import { updateClip } from "#src/tools/clip/update/update-clip.ts";
@@ -103,6 +105,7 @@ const tools: Record<string, (args: unknown) => unknown> = {
   },
   "ppal-context": (args) => contextTool(args as any, context),
   "ppal-raw-live-api": (args) => rawLiveApi(args as any, context),
+  "ppal-capture-start": (args) => captureStart(args as any),
 };
 /* eslint-enable @typescript-eslint/no-explicit-any -- end of tools dispatch section */
 

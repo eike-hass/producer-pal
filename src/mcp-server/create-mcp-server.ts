@@ -1,8 +1,11 @@
 // Producer Pal
-// Copyright (C) 2026 Adam Murray
+// Copyright (C) 2026 Adam Murray, Eike Haß
+// AI assistance: Claude (Anthropic)
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
+import { z } from "zod";
 import { VERSION } from "#src/shared/version.ts";
 import { toolDefCreateClip } from "#src/tools/clip/create/create-clip.def.ts";
 import { toolDefReadClip } from "#src/tools/clip/read/read-clip.def.ts";
@@ -63,6 +66,7 @@ export const TOOL_NAMES: readonly string[] = Object.freeze(
 interface CreateMcpServerOptions {
   smallModelMode?: boolean;
   tools?: string[];
+  sampleFolder?: string;
 }
 
 /**
@@ -76,7 +80,7 @@ export function createMcpServer(
   callLiveApi: CallLiveApiFunction,
   options: CreateMcpServerOptions = {},
 ): McpServer {
-  const { smallModelMode = false, tools } = options;
+  const { smallModelMode = false, tools, sampleFolder = "" } = options;
   const includedSet = tools ? new Set(tools) : null;
 
   const server = new McpServer({
@@ -94,5 +98,54 @@ export function createMcpServer(
     toolDefRawLiveApi(server, callLiveApi, { smallModelMode });
   }
 
+  // Capture tool: records audio to a WAV file
+  if (process.env.ENABLE_CAPTURE === "true" && !smallModelMode) {
+    registerCaptureTool(server, callLiveApi, sampleFolder);
+  }
+
   return server;
+}
+
+/**
+ * Register the ppal-capture tool with a custom Node-side handler.
+ * Unlike standard tools, this tool communicates with the ppal-capture.amxd device.
+ * @param server - MCP server instance
+ * @param callLiveApi - Function to call V8 tools
+ * @param sampleFolder - Configured sample folder path (or empty string if not set)
+ */
+function registerCaptureTool(
+  server: McpServer,
+  callLiveApi: CallLiveApiFunction,
+  sampleFolder: string,
+): void {
+  server.registerTool(
+    "ppal-capture",
+    {
+      title: "Capture",
+      description:
+        "Record audio from the Live session to a WAV file. " +
+        "Returns the file path for use with ppal-create-clip.",
+      annotations: { readOnlyHint: false, destructiveHint: false },
+      inputSchema: z.object({
+        duration: z
+          .string()
+          .optional()
+          .describe(
+            'recording duration in bar:beat format (default: "4:0" = 4 bars)',
+          ),
+        source: z
+          .union([z.coerce.number(), z.literal("master")])
+          .optional()
+          .describe(
+            "what to capture: track index for a specific track (post-fader), " +
+              "or 'master' for full mix. Default: master",
+          ),
+      }),
+    },
+    async (args: Record<string, unknown>): Promise<CallToolResult> => {
+      const { handleCapture } = await import("./capture-handler.ts");
+
+      return await handleCapture(callLiveApi, sampleFolder, args);
+    },
+  );
 }
